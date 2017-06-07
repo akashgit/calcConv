@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+	<title>Tetris</title>
+	<link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+				 rel = "stylesheet">
+	<style>
+	.grid {
+		border: 1px solid #ddd;
+		display: inline-block;
+		padding: 1px;
+	}
+	.row {
+		margin: 0;
+	}
+	.cell {
+		border: 1px solid #ddd;
+		width: 20px;
+		height: 20px;
+		display: inline-block;
+		margin: 1px;
+		vertical-align: top;
+	}
+	.ui-slider-horizontal {
+	    height: 8px;
+	    width: 200px;
+	}
+	</style>
+
+      <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+      <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+	<script src="grid.js"></script>
+</head>
+<body>
+
+<div class="grid"></div>
+
+<script>
+(function() {
+    "use strict";
+
+    var grid = new Grid({
+        rows: 0,
+        cols: 0,
+        render: {
+            placeholder: ".grid"
+        }
+    });
+    grid.getCellAt(2, 1).$el.css('background', 'red');
+}());
+</script>
+<p>
+   <label for = "price">Price range:</label>
+   <input type = "text" id = "price" style = "border:0; color:#b9cd6d; font-weight:bold;">
+</p>
+<div id = "slider-1"></div>
+<script>
+         $(function() {
+					 var grid = new Grid({
+			         rows: 0,
+			         cols: 0,
+			         render: {
+			             placeholder: ".grid"
+			         }
+			     });
+            $( "#slider-1" ).slider({
+               min: 0,
+               max: 10,
+               slide: function( event, ui ) {
+                  $( "#price" ).val( ui.value);
+									$(".grid").empty()
+									grid.rowsCount = ui.value
+									grid.colsCount = ui.value
+									grid.render()
+									// var grid = new Grid({
+							    //     rows: ui.value,
+							    //     cols: ui.value,
+							    //     render: {
+							    //         placeholder: ".grid"
+							    //     }
+							    // });
+
+               }
+            });
+            $( "#price" ).val( $( "#slider-1" ).slider( "value" ) );
+         });
+</script>
+
+</body>
+</html>
