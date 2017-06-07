@@ -2,13 +2,14 @@
 <html>
 <head>
 	<title>Tetris</title>
-	<link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
-				 rel = "stylesheet">
+	<link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
+
 	<style>
 	.grid {
 		border: 1px solid #ddd;
 		display: inline-block;
 		padding: 1px;
+		color: #b9cd6d;
 	}
 	.row {
 		margin: 0;
@@ -20,11 +21,15 @@
 		display: inline-block;
 		margin: 1px;
 		vertical-align: top;
+		background: #b9cd6d;
 	}
-	.ui-slider-horizontal {
-	    height: 8px;
-	    width: 200px;
-	}
+	
+
+
+
+
+
+
 	</style>
 
       <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
@@ -34,28 +39,42 @@
 </head>
 <body>
 
-<div class="grid"></div>
 
-<script>
-(function() {
-    "use strict";
-
-    var grid = new Grid({
-        rows: 0,
-        cols: 0,
-        render: {
-            placeholder: ".grid"
-        }
-    });
-    grid.getCellAt(2, 1).$el.css('background', 'red');
-}());
-</script>
 <p>
-   <label for = "price">Price range:</label>
-   <input type = "text" id = "price" style = "border:0; color:#b9cd6d; font-weight:bold;">
+	<div style = "border: 3px solid green;display: inline-block;; style = "margin: 50px;"">
+		
+		<div >
+			<label for = "input">Input Size:</label>
+			<input type = "text" id = "input" style = "border:0; color:#b9cd6d; font-weight:bold;">
+			<div id = "slider-1" style = "margin: 30px;"></div>
+
+			<label for = "kernel">Kernel Size:</label>
+			<input type = "text" id = "kernel" style = "border:0; color:#b9cd6d; font-weight:bold;">
+			<div id = "slider-2" style = "margin: 30px;"></div>
+
+			<label for = "stride">Stride:</label>
+			<input type = "text" id = "stride" style = "border:0; color:#b9cd6d; font-weight:bold;">
+			<div id = "slider-3" style = "margin: 30px;"></div>
+
+			<label for = "padding">Padding:</label>
+			<input type = "text" id = "padding" style = "border:0; color:#b9cd6d; font-weight:bold;">
+			<div id = "slider-4" style = "margin: 30px;"></div>
+		</div>
+
+		<div style = "margin: 10px;">
+			<div class="grid"></div>
+		</div>
+
+		
+	</div>
+
+
+
 </p>
-<div id = "slider-1"></div>
 <script>
+function o(i,k,s,p) {
+    return Math.floor((i+2*p-k)/s)+1;
+}
          $(function() {
 					 var grid = new Grid({
 			         rows: 0,
@@ -65,25 +84,80 @@
 			         }
 			     });
             $( "#slider-1" ).slider({
-               min: 0,
-               max: 10,
+               min: 1,
+               max: 32,
                slide: function( event, ui ) {
-                  $( "#price" ).val( ui.value);
+                  $( "#input" ).val( ui.value);
 									$(".grid").empty()
-									grid.rowsCount = ui.value
-									grid.colsCount = ui.value
+									i = ui.value
+									k = $( "#slider-2" ).slider( "value" )
+									s = $( "#slider-3" ).slider( "value" )
+									p = $( "#slider-4" ).slider( "value" )
+									new_o = o(i,k,s,p)
+									grid.rowsCount = new_o
+									grid.colsCount = new_o
 									grid.render()
-									// var grid = new Grid({
-							    //     rows: ui.value,
-							    //     cols: ui.value,
-							    //     render: {
-							    //         placeholder: ".grid"
-							    //     }
-							    // });
 
                }
             });
-            $( "#price" ).val( $( "#slider-1" ).slider( "value" ) );
+
+            $( "#slider-2" ).slider({
+               min: 1,
+               max: 5,
+               slide: function( event, ui ) {
+                  $( "#kernel" ).val( ui.value);
+									$(".grid").empty()
+									i = $( "#slider-1" ).slider( "value" )
+									k = ui.value
+									s = $( "#slider-3" ).slider( "value" )
+									p = $( "#slider-4" ).slider( "value" )
+									new_o = o(i,k,s,p)
+									grid.rowsCount = new_o
+									grid.colsCount = new_o
+									grid.render()
+
+               }
+            });
+
+            $( "#slider-3" ).slider({
+               min: 1,
+               max: 5,
+               slide: function( event, ui ) {
+                  $( "#stride" ).val( ui.value);
+									$(".grid").empty()
+									i = $( "#slider-1" ).slider( "value" )
+									k = $( "#slider-2" ).slider( "value" )
+									s = ui.value
+									p = $( "#slider-4" ).slider( "value" )
+									new_o = o(i,k,s,p)
+									grid.rowsCount = new_o
+									grid.colsCount = new_o
+									grid.render()
+
+               }
+            });
+
+            $( "#slider-4" ).slider({
+               min: 0,
+               max: 3,
+               slide: function( event, ui ) {
+                  $( "#padding" ).val( ui.value);
+									$(".grid").empty()
+									i = $( "#slider-1" ).slider( "value" )
+									k = $( "#slider-2" ).slider( "value" )
+									s = $( "#slider-3" ).slider( "value" )
+									p = ui.value
+									new_o = o(i,k,s,p)
+									grid.rowsCount = new_o
+									grid.colsCount = new_o
+									grid.render()
+
+               }
+            });
+            $( "#input" ).val( $( "#slider-1" ).slider( "value" ) );
+            $( "#kernel" ).val( $( "#slider-2" ).slider( "value" ) );
+            $( "#stride" ).val( $( "#slider-3" ).slider( "value" ) );
+            $( "#padding" ).val( $( "#slider-4" ).slider( "value" ) );
          });
 </script>
 
